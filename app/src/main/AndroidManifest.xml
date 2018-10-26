@@ -21,12 +21,17 @@
         </activity>
         <activity
             android:name=".EditorActivity"
-            android:label="Add Some Products"
             android:parentActivityName=".InventoryActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".InventoryActivity" />
         </activity>
+
+        <provider
+            android:name=".data.InventoryProvider"
+            android:authorities="com.example.android.inventoryapp"
+            android:exported="false" />
+
     </application>
 
 </manifest>
