@@ -2,6 +2,7 @@ package com.example.android.inventoryapp;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,13 +40,13 @@ public class InventoryCursorAdapter extends CursorAdapter {
         tvProductPrice.setText("Price: $" + productPrice);
         tvProductQuantity.setText("Quantity: " + productQuantity);
 
-        if (supplierName == null) {
+        if (TextUtils.isEmpty(supplierName)) {
             tvSupplierName.setVisibility(View.GONE);
         } else {
             tvSupplierName.setText("Supplier Name: " + supplierName);
         }
 
-        if (supplierPhone == null) {
+        if (TextUtils.isEmpty(supplierPhone)) {
             tvSupplierPhone.setVisibility(View.GONE);
         } else {
             tvSupplierPhone.setText("Supplier Phone: " + supplierPhone);

@@ -44,6 +44,7 @@ public class InventoryProvider extends ContentProvider {
     @Nullable
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
+
         SQLiteDatabase db = mDbHelpder.getReadableDatabase();
         Cursor cursor;
 
@@ -60,6 +61,8 @@ public class InventoryProvider extends ContentProvider {
             default:
                 throw new IllegalArgumentException("Cannot query unknown URI " + uri);
         }
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
+
         return cursor;
     }
 
@@ -93,8 +96,8 @@ public class InventoryProvider extends ContentProvider {
         String name = contentValues.getAsString(InventoryEntry.COLUMN_PRODUCT_NAME);
         Integer price = contentValues.getAsInteger(InventoryEntry.COLUMN_PRODUCT_PRICE);
         Integer quantity = contentValues.getAsInteger(InventoryEntry.COLUMN_PRODUCT_QUANTITY);
-        String supName = contentValues.getAsString(InventoryEntry.COLUMN_PRODUCT_SUPPLIER);
-        String supPhone = contentValues.getAsString(InventoryEntry.COLUMN_PRODUCT_SUPPLIER_PHONE);
+//        String supName = contentValues.getAsString(InventoryEntry.COLUMN_PRODUCT_SUPPLIER);
+//        String supPhone = contentValues.getAsString(InventoryEntry.COLUMN_PRODUCT_SUPPLIER_PHONE);
 
         if (name == null) {
             throw new IllegalArgumentException("A product name is required");
@@ -115,8 +118,8 @@ public class InventoryProvider extends ContentProvider {
             return null;
         }
 
+        getContext().getContentResolver().notifyChange(uri, null);
         return ContentUris.withAppendedId(uri, newRowId);
-
     }
 
     @Override
@@ -124,13 +127,25 @@ public class InventoryProvider extends ContentProvider {
         SQLiteDatabase db = mDbHelpder.getWritableDatabase();
 
         final int match = sUriMatcher.match(uri);
+        int rowsDeleted;
+
         switch (match) {
             case INVENTORY:
-                return delete(uri, selection, selectionArgs);
+                rowsDeleted = db.delete(InventoryEntry.TABLE_NAME, selection, selectionArgs);
+                if (rowsDeleted != 0) {
+                    getContext().getContentResolver().notifyChange(uri, null);
+                }
+                return rowsDeleted;
             case INVENTORY_ID:
                 selection = InventoryEntry._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
-                return delete(uri, selection, selectionArgs);
+
+                rowsDeleted = db.delete(InventoryEntry.TABLE_NAME, selection, selectionArgs);
+                if (rowsDeleted != 0) {
+                    getContext().getContentResolver().notifyChange(uri, null);
+                }
+
+                return rowsDeleted;
             default:
                 throw new IllegalArgumentException("Delete is not supported for " + uri);
         }
@@ -178,6 +193,11 @@ public class InventoryProvider extends ContentProvider {
         }
 
         SQLiteDatabase db = mDbHelpder.getWritableDatabase();
-        return db.update(InventoryEntry.TABLE_NAME, contentValues, selection, selectionArgs);
+        int rowsUpdated = db.update(InventoryEntry.TABLE_NAME, contentValues, selection, selectionArgs);
+
+        if (rowsUpdated != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+        return rowsUpdated;
     }
 }

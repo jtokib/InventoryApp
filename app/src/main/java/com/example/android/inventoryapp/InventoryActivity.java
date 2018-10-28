@@ -2,6 +2,7 @@ package com.example.android.inventoryapp;
 
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -12,6 +13,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -89,6 +91,34 @@ public class InventoryActivity extends AppCompatActivity implements LoaderManage
         }
     }
 
+    private void showDeleteConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setMessage("Delete all items?");
+        builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                deleteItem();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (dialogInterface != null) {
+                    dialogInterface.dismiss();
+                }
+            }
+        });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    private void deleteItem() {
+        int rowsDeleted = getContentResolver().delete(InventoryEntry.CONTENT_URI, null, null);
+        Toast.makeText(this, "All Items Deleted", Toast.LENGTH_SHORT).show();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -104,9 +134,13 @@ public class InventoryActivity extends AppCompatActivity implements LoaderManage
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.insert_dummy_data) {
-            insertDummyData();
-            return true;
+        switch (id) {
+            case R.id.insert_dummy_data:
+                insertDummyData();
+                return true;
+            case R.id.delete_all:
+                showDeleteConfirmationDialog();
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
