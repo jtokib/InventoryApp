@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -55,6 +56,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         if (mCurrentItemUri == null) {
             setTitle("Add Item");
             invalidateOptionsMenu();
+            findViewById(R.id.call_supplier_editor).setVisibility(View.GONE);
 
         } else {
             setTitle("Edit Item");
@@ -74,6 +76,31 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mProductQuantityEt.setOnTouchListener(mTouchListener);
         mProductSupNameEt.setOnTouchListener(mTouchListener);
         mProductSupPhoneEt.setOnTouchListener(mTouchListener);
+
+        Button callSupplier = findViewById(R.id.call_supplier_editor);
+
+        if (callSupplier != null) {
+            callSupplier.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(Intent.ACTION_DIAL);
+                    intent.setData(Uri.parse("tel:" + mProductSupPhoneEt.getText().toString()));
+                    if (intent.resolveActivity(getPackageManager()) != null) {
+                        startActivity(intent);
+                    }
+                }
+            });
+        }
+    }
+
+    private void increaseQuantity() {
+        //TODO: Increase by 1
+
+    }
+
+    private void decreaseQuantity() {
+        //TODO: Decrease by 1
+
     }
 
     private void saveItem() {
@@ -103,26 +130,26 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             Uri newUri = getContentResolver().insert(InventoryEntry.CONTENT_URI, values);
 
             if (newUri == null) {
-                Toast.makeText(this, "Item entered", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.editor_activity_item_entered, Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "Entry failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.editor_activity_item_failed, Toast.LENGTH_SHORT).show();
             }
         } else {
             int rowsAffected = getContentResolver().update(mCurrentItemUri, values, null, null);
 
             if (rowsAffected == 0) {
-                Toast.makeText(this, "Entry failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.editor_activity_item_failed, Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "Item entered", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.editor_activity_item_entered, Toast.LENGTH_SHORT).show();
             }
         }
     }
 
     private void showUnsavedChangesDialog(DialogInterface.OnClickListener discardClickListener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Discard changes and quit editing item?");
-        builder.setPositiveButton("Discard", discardClickListener);
-        builder.setNegativeButton("Keep Editing", new DialogInterface.OnClickListener() {
+        builder.setMessage(R.string.editor_activity_show_unsaved_prompt);
+        builder.setPositiveButton(R.string.editor_activity_show_unsaved_positive, discardClickListener);
+        builder.setNegativeButton(R.string.editor_activity_show_unsaved_negative, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (dialogInterface != null) {
@@ -153,14 +180,14 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     private void showDeleteConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        builder.setMessage("Delete this item?");
-        builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+        builder.setMessage(R.string.delete_confirmation_single_item);
+        builder.setPositiveButton(R.string.delete_confirmation_delete, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 deleteItem();
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.delete_confirmation_cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (dialogInterface != null) {
@@ -177,9 +204,9 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         if (mCurrentItemUri != null) {
             int rowsDeleted = getContentResolver().delete(mCurrentItemUri, null, null);
             if (rowsDeleted == 0) {
-                Toast.makeText(this, "Delete failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.editor_activity_delete_fail, Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.editor_activity_deleted, Toast.LENGTH_SHORT).show();
             }
         }
         finish();

@@ -1,6 +1,5 @@
 package com.example.android.inventoryapp;
 
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,10 +15,10 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -55,16 +54,6 @@ public class InventoryActivity extends AppCompatActivity implements LoaderManage
         mInventoryAdapter = new InventoryCursorAdapter(this, null);
         listView.setAdapter(mInventoryAdapter);
 
-        //Setup on item click listener
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                Intent intent = new Intent(InventoryActivity.this, EditorActivity.class);
-                Uri currentItemUri = ContentUris.withAppendedId(InventoryEntry.CONTENT_URI, id);
-                intent.setData(currentItemUri);
-                startActivity(intent);
-            }
-        });
         getSupportLoaderManager().initLoader(INVENTORY_LOADER, null, this);
     }
 
@@ -76,32 +65,30 @@ public class InventoryActivity extends AppCompatActivity implements LoaderManage
     private void insertDummyData() {
 
         ContentValues values = new ContentValues();
-        values.put(InventoryEntry.COLUMN_PRODUCT_NAME, "Test Item");
+        values.put(InventoryEntry.COLUMN_PRODUCT_NAME, getString(R.string.dummy_data_prod_name));
         values.put(InventoryEntry.COLUMN_PRODUCT_PRICE, 5);
         values.put(InventoryEntry.COLUMN_PRODUCT_QUANTITY, 1);
-//            values.put(InventoryEntry.COLUMN_PRODUCT_SUPPLIER, "TEST SUPPLIER");
-//            values.put(InventoryEntry.COLUMN_PRODUCT_SUPPLIER_PHONE, "123-456-7890");
 
         Uri newUri = getContentResolver().insert(InventoryEntry.CONTENT_URI, values);
 
         if (newUri == null) {
-            Toast.makeText(this, "Unable to add dummy data", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.dummy_data_entry_failed, Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(this, "Dummy data added", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.dummy_data_entry_success, Toast.LENGTH_LONG).show();
         }
     }
 
     private void showDeleteConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        builder.setMessage("Delete all items?");
-        builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+        builder.setMessage(R.string.delete_confirmation_all_items);
+        builder.setPositiveButton(R.string.delete_confirmation_delete, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 deleteItem();
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.delete_confirmation_cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (dialogInterface != null) {
@@ -117,6 +104,7 @@ public class InventoryActivity extends AppCompatActivity implements LoaderManage
     private void deleteItem() {
         int rowsDeleted = getContentResolver().delete(InventoryEntry.CONTENT_URI, null, null);
         Toast.makeText(this, "All Items Deleted", Toast.LENGTH_SHORT).show();
+        Log.v("InventoryActivity", rowsDeleted + " rows deleted from database");
     }
 
     @Override

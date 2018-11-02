@@ -1,4 +1,24 @@
 <resources>
     <string name="app_name">Mega Awesome Inventory App</string>
+
+    //Dummy Data
     <string name="insert_dummy_data">Insert Dummy Data</string>
+    <string name="dummy_data_prod_name">Test Item</string>
+    <string name="dummy_data_entry_failed">Unable to add dummy data</string>
+    <string name="dummy_data_entry_success">Dummy data added</string>
+
+    //Delete Confirmation
+    <string name="delete_confirmation_all_items">Delete all items?</string>
+    <string name="delete_confirmation_single_item">Delete this item?</string>
+    <string name="delete_confirmation_delete">Delete</string>
+    <string name="delete_confirmation_cancel">Cancel</string>
+
+    //Editor Activity
+    <string name="editor_activity_item_entered">Item entered</string>
+    <string name="editor_activity_item_failed">Entry failed</string>
+    <string name="editor_activity_show_unsaved_prompt">Discard changes and quit editing item?</string>
+    <string name="editor_activity_show_unsaved_positive">Discard</string>
+    <string name="editor_activity_show_unsaved_negative">Keep Editing</string>
+    <string name="editor_activity_delete_fail">Delete failed</string>
+    <string name="editor_activity_deleted">Deleted</string>
 </resources>
