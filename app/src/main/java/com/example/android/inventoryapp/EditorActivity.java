@@ -21,6 +21,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.android.inventoryapp.data.InventoryContract.InventoryEntry;
@@ -79,8 +80,8 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
         //Buttons
         Button callSupplier = findViewById(R.id.call_supplier_editor);
-        Button increaseQuantity = findViewById(R.id.increase_quantity);
-        Button decreaseQuantity = findViewById(R.id.decrease_quantity);
+        ImageButton increaseQuantity = findViewById(R.id.increase_quantity);
+        ImageButton decreaseQuantity = findViewById(R.id.decrease_quantity);
 
         increaseQuantity.setOnClickListener(new View.OnClickListener() {
             @Override

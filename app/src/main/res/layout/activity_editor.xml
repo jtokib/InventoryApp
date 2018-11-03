@@ -64,13 +64,14 @@
         android:textAppearance="@android:style/TextAppearance.Medium" />
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:orientation="horizontal">
 
-        <Button
+        <ImageButton
             android:id="@+id/increase_quantity"
+            android:src="@drawable/ic_action_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="+" />
@@ -84,8 +85,9 @@
             android:textAlignment="center"
             android:textAppearance="@android:style/TextAppearance.Small" />
 
-        <Button
+        <ImageButton
             android:id="@+id/decrease_quantity"
+            android:src="@drawable/ic_action_minus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="-" />
