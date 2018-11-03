@@ -54,12 +54,12 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mCurrentItemUri = intent.getData();
 
         if (mCurrentItemUri == null) {
-            setTitle("Add Item");
+            setTitle(R.string.editor_activity_add_item_title);
             invalidateOptionsMenu();
             findViewById(R.id.call_supplier_editor).setVisibility(View.GONE);
 
         } else {
-            setTitle("Edit Item");
+            setTitle(R.string.editor_activity_edit_item_title);
             getSupportLoaderManager().initLoader(IVENTORY_EDITOR_LOADER, null, this);
         }
 
@@ -77,30 +77,50 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mProductSupNameEt.setOnTouchListener(mTouchListener);
         mProductSupPhoneEt.setOnTouchListener(mTouchListener);
 
+        //Buttons
         Button callSupplier = findViewById(R.id.call_supplier_editor);
+        Button increaseQuantity = findViewById(R.id.increase_quantity);
+        Button decreaseQuantity = findViewById(R.id.decrease_quantity);
 
-        if (callSupplier != null) {
-            callSupplier.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(Intent.ACTION_DIAL);
-                    intent.setData(Uri.parse("tel:" + mProductSupPhoneEt.getText().toString()));
-                    if (intent.resolveActivity(getPackageManager()) != null) {
-                        startActivity(intent);
-                    }
+        increaseQuantity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String productQuantity = mProductQuantityEt.getText().toString().trim();
+                if (!TextUtils.isEmpty(productQuantity)) {
+                    Integer quantity = Integer.parseInt(productQuantity);
+                    quantity++;
+                    mProductQuantityEt.setText(String.valueOf(quantity));
                 }
-            });
-        }
-    }
+            }
+        });
 
-    private void increaseQuantity() {
-        //TODO: Increase by 1
+        decreaseQuantity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String productQuantity = mProductQuantityEt.getText().toString().trim();
+                if (!TextUtils.isEmpty(productQuantity)) {
+                    Integer quantity = Integer.parseInt(productQuantity);
+                    if (quantity > 0) {
+                        quantity--;
+                    } else {
+                        quantity = 0;
+                        Toast.makeText(getApplicationContext(), R.string.editor_activity_invalid_quantity, Toast.LENGTH_SHORT).show();
+                    }
+                    mProductQuantityEt.setText(String.valueOf(quantity));
+                }
+            }
+        });
 
-    }
-
-    private void decreaseQuantity() {
-        //TODO: Decrease by 1
-
+        callSupplier.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:" + mProductSupPhoneEt.getText().toString()));
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(intent);
+                }
+            }
+        });
     }
 
     private void saveItem() {
@@ -108,6 +128,11 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         // Use trim to eliminate leading or trailing white space
         String productNameString = mProductNameEt.getText().toString().trim();
         String productPriceString = mProductPriceEt.getText().toString().trim();
+        Integer price = Integer.parseInt(productPriceString);
+        if (price <= 0) {
+            Toast.makeText(this, R.string.editor_activity_invalid_price, Toast.LENGTH_SHORT).show();
+            return;
+        }
         String productQuantityString = mProductQuantityEt.getText().toString().trim();
         String productSupName = mProductSupNameEt.getText().toString().trim();
         String productSupPhone = mProductSupPhoneEt.getText().toString().trim();
@@ -130,17 +155,21 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             Uri newUri = getContentResolver().insert(InventoryEntry.CONTENT_URI, values);
 
             if (newUri == null) {
-                Toast.makeText(this, R.string.editor_activity_item_entered, Toast.LENGTH_SHORT).show();
-            } else {
                 Toast.makeText(this, R.string.editor_activity_item_failed, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, R.string.editor_activity_item_entered, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, InventoryActivity.class);
+                startActivity(intent);
             }
         } else {
             int rowsAffected = getContentResolver().update(mCurrentItemUri, values, null, null);
 
             if (rowsAffected == 0) {
-                Toast.makeText(this, R.string.editor_activity_item_failed, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.editor_activity_updated_failed, Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, R.string.editor_activity_item_entered, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.editor_activity_item_updated, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, InventoryActivity.class);
+                startActivity(intent);
             }
         }
     }

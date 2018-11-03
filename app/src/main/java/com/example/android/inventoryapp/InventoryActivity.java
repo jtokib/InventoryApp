@@ -103,7 +103,7 @@ public class InventoryActivity extends AppCompatActivity implements LoaderManage
 
     private void deleteItem() {
         int rowsDeleted = getContentResolver().delete(InventoryEntry.CONTENT_URI, null, null);
-        Toast.makeText(this, "All Items Deleted", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.inventory_activity_delete_all, Toast.LENGTH_SHORT).show();
         Log.v("InventoryActivity", rowsDeleted + " rows deleted from database");
     }
 
@@ -157,12 +157,10 @@ public class InventoryActivity extends AppCompatActivity implements LoaderManage
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
         mInventoryAdapter.swapCursor(cursor);
-
     }
 
     @Override
     public void onLoaderReset(@NonNull Loader<Cursor> loader) {
         mInventoryAdapter.swapCursor(null);
-
     }
 }

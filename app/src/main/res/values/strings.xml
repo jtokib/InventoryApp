@@ -15,10 +15,21 @@
 
     //Editor Activity
     <string name="editor_activity_item_entered">Item entered</string>
+    <string name="editor_activity_item_updated">Item updated</string>
     <string name="editor_activity_item_failed">Entry failed</string>
+    <string name="editor_activity_updated_failed">Update failed</string>
     <string name="editor_activity_show_unsaved_prompt">Discard changes and quit editing item?</string>
     <string name="editor_activity_show_unsaved_positive">Discard</string>
     <string name="editor_activity_show_unsaved_negative">Keep Editing</string>
     <string name="editor_activity_delete_fail">Delete failed</string>
     <string name="editor_activity_deleted">Deleted</string>
+    <string name="editor_activity_add_item_title">Add Item</string>
+    <string name="editor_activity_edit_item_title">Edit Item</string>
+    <string name="editor_activity_invalid_quantity">Can\'t go below 0</string>
+    <string name="editor_activity_invalid_price">Price must be greater than 0</string>
+
+    //Misc
+    <string name="inventory_activity_delete_all">All Items Deleted</string>
+    <string name="cursor_adaptor_item_sold">Item Sold</string>
+    <string name="cursor_adaptor_out_of_stock">Out of Stock</string>
 </resources>
