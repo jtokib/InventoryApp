@@ -129,11 +129,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         // Use trim to eliminate leading or trailing white space
         String productNameString = mProductNameEt.getText().toString().trim();
         String productPriceString = mProductPriceEt.getText().toString().trim();
-        Integer price = Integer.parseInt(productPriceString);
-        if (price <= 0) {
-            Toast.makeText(this, R.string.editor_activity_invalid_price, Toast.LENGTH_SHORT).show();
-            return;
-        }
         String productQuantityString = mProductQuantityEt.getText().toString().trim();
         String productSupName = mProductSupNameEt.getText().toString().trim();
         String productSupPhone = mProductSupPhoneEt.getText().toString().trim();
@@ -141,9 +136,21 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         // Create a ContentValues object where column names are the keys,
         // and pet attributes from the editor are the values.
         ContentValues values = new ContentValues();
-        values.put(InventoryEntry.COLUMN_PRODUCT_NAME, productNameString);
-        values.put(InventoryEntry.COLUMN_PRODUCT_PRICE, productPriceString);
-        values.put(InventoryEntry.COLUMN_PRODUCT_QUANTITY, productQuantityString);
+        if (TextUtils.isEmpty(productNameString)) {
+            Toast.makeText(this, R.string.editor_actvity_name_required, Toast.LENGTH_SHORT).show();
+        } else {
+            values.put(InventoryEntry.COLUMN_PRODUCT_NAME, productNameString);
+        }
+        if (TextUtils.isEmpty(productPriceString)) {
+            Toast.makeText(this, R.string.editor_actvity_price_required, Toast.LENGTH_SHORT).show();
+        } else {
+            values.put(InventoryEntry.COLUMN_PRODUCT_PRICE, productPriceString);
+        }
+        if (TextUtils.isEmpty(productQuantityString)) {
+            Toast.makeText(this, R.string.editor_actvity_quantity_required, Toast.LENGTH_SHORT).show();
+        } else {
+            values.put(InventoryEntry.COLUMN_PRODUCT_QUANTITY, productQuantityString);
+        }
         values.put(InventoryEntry.COLUMN_PRODUCT_SUPPLIER, productSupName);
         values.put(InventoryEntry.COLUMN_PRODUCT_SUPPLIER_PHONE, productSupPhone);
 
