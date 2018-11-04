@@ -27,12 +27,13 @@
     <string name="editor_activity_edit_item_title">Edit Item</string>
     <string name="editor_activity_invalid_quantity">Can\'t go below 0</string>
     <string name="editor_activity_invalid_price">Price must be greater than 0</string>
+    <string name="editor_activity_name_required">Product name is required</string>
+    <string name="editor_activity_price_required">Product price is required and must be greater than 0</string>
+    <string name="editor_activity_quantity_required">Product quantity is required or set to 0</string>
 
     //Misc
     <string name="inventory_activity_delete_all">All Items Deleted</string>
     <string name="cursor_adaptor_item_sold">Item Sold</string>
     <string name="cursor_adaptor_out_of_stock">Out of Stock</string>
-    <string name="editor_actvity_name_required">Product name is required</string>
-    <string name="editor_actvity_price_required">Product price is required and must be greater than 0</string>
-    <string name="editor_actvity_quantity_required">Product quantity is required or set to 0</string>
+
 </resources>

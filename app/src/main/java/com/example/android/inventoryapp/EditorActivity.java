@@ -137,17 +137,17 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         // and pet attributes from the editor are the values.
         ContentValues values = new ContentValues();
         if (TextUtils.isEmpty(productNameString)) {
-            Toast.makeText(this, R.string.editor_actvity_name_required, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.editor_activity_name_required, Toast.LENGTH_SHORT).show();
         } else {
             values.put(InventoryEntry.COLUMN_PRODUCT_NAME, productNameString);
         }
         if (TextUtils.isEmpty(productPriceString)) {
-            Toast.makeText(this, R.string.editor_actvity_price_required, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.editor_activity_price_required, Toast.LENGTH_SHORT).show();
         } else {
             values.put(InventoryEntry.COLUMN_PRODUCT_PRICE, productPriceString);
         }
         if (TextUtils.isEmpty(productQuantityString)) {
-            Toast.makeText(this, R.string.editor_actvity_quantity_required, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.editor_activity_quantity_required, Toast.LENGTH_SHORT).show();
         } else {
             values.put(InventoryEntry.COLUMN_PRODUCT_QUANTITY, productQuantityString);
         }
